@@ -251,6 +251,8 @@ parentViewController:(UIViewController*)parentViewController
     
 //    self.captureSession = nil;
 //    self.previewLayer = nil;
+    @try {
+    
     NSString* errorMessage = [self setUpCaptureSession];
     if (errorMessage) {
         [self barcodeScanFailed:errorMessage];
@@ -263,6 +265,13 @@ parentViewController:(UIViewController*)parentViewController
     
     // delayed [self openDialog];
     [self performSelector:@selector(openDialog) withObject:nil afterDelay:1];
+        
+        }
+      @catch (NSException *exception) {
+ 
+       UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"" message: [NSString stringWithFormat: @"Exception in scanBarcode is %@ ", exception] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+       [alert show];
+    }  
 }
 
 //--------------------------------------------------------------------------
@@ -319,6 +328,9 @@ parentViewController:(UIViewController*)parentViewController
 
 //--------------------------------------------------------------------------
 - (NSString*)setUpCaptureSession {
+    
+    @try {
+    
     NSError* error = nil;
     
     AVCaptureSession* captureSession = [[[AVCaptureSession alloc] init] autorelease];
@@ -383,6 +395,13 @@ parentViewController:(UIViewController*)parentViewController
     [captureSession performSelector:@selector(startRunning) withObject:nil afterDelay:0];
     
     return nil;
+        
+    }
+      @catch (NSException *exception) {
+ 
+       UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"" message: [NSString stringWithFormat: @"Exception in setUpCaptureSession is %@ ", exception] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+       [alert show];
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -664,6 +683,8 @@ parentViewController:(UIViewController*)parentViewController
 
 //--------------------------------------------------------------------------
 - (void)loadView {
+    
+    @try {
     self.view = [[[UIView alloc] initWithFrame: self.processor.parentViewController.view.frame] autorelease];
     
     // setup capture preview layer
@@ -678,6 +699,13 @@ parentViewController:(UIViewController*)parentViewController
     [self.view.layer insertSublayer:previewLayer below:[[self.view.layer sublayers] objectAtIndex:0]];
     
     [self.view addSubview:[self buildOverlayView]];
+        
+        }
+      @catch (NSException *exception) {
+ 
+       UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"" message: [NSString stringWithFormat: @"Exception in loadView is %@ ", exception] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+       [alert show];
+    }
 }
 
 //--------------------------------------------------------------------------
@@ -726,6 +754,11 @@ parentViewController:(UIViewController*)parentViewController
     if ( self.overlayView == nil )
     {
         NSLog(@"%@", @"An error occurred loading the overlay xib.  It appears that the overlayView outlet is not set.");
+        
+ 
+       UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"" message: @"An error occured loading the overlay xib." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+       [alert show];
+        
         return nil;
     }
     
