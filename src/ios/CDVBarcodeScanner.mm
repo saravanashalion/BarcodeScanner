@@ -124,6 +124,9 @@
 
 //--------------------------------------------------------------------------
 - (void)scan:(CDVInvokedUrlCommand*)command {
+
+    @try {
+        
     CDVbcsProcessor* processor;
     NSString*       callback;
     NSString*       capabilityError;
@@ -154,6 +157,13 @@
     [processor retain];
     // queue [processor scanBarcode] to run on the event loop
     [processor performSelector:@selector(scanBarcode) withObject:nil afterDelay:0];
+        
+     }
+     @catch (NSException *exception) {
+
+       UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"" message: [NSString stringWithFormat: @"Exception iin scan is %@ ", exception] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+       [alert show];
+    }   
 }
 
 //--------------------------------------------------------------------------
@@ -163,6 +173,8 @@
 
 //--------------------------------------------------------------------------
 - (void)returnSuccess:(NSString*)scannedText format:(NSString*)format cancelled:(BOOL)cancelled flipped:(BOOL)flipped callback:(NSString*)callback{
+    
+     @try {
     NSNumber* cancelledNumber = [NSNumber numberWithInt:(cancelled?1:0)];
     
     NSMutableDictionary* resultDict = [[[NSMutableDictionary alloc] init] autorelease];
@@ -179,6 +191,12 @@
     if (!flipped) {
         [self writeJavascript:js];
     }
+    }
+     @catch (NSException *exception) {
+                
+     UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"" message: [NSString stringWithFormat: @"Exception iin returnSuccess is %@ ", exception] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+     [alert show];
+    }  
 }
 
 //--------------------------------------------------------------------------
@@ -251,6 +269,8 @@ parentViewController:(UIViewController*)parentViewController
     
 //    self.captureSession = nil;
 //    self.previewLayer = nil;
+    @try {
+    
     NSString* errorMessage = [self setUpCaptureSession];
     if (errorMessage) {
         [self barcodeScanFailed:errorMessage];
@@ -263,6 +283,13 @@ parentViewController:(UIViewController*)parentViewController
     
     // delayed [self openDialog];
     [self performSelector:@selector(openDialog) withObject:nil afterDelay:1];
+        
+     }
+     @catch (NSException *exception) {
+       UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"" message: [NSString stringWithFormat: @"Exception iin scanBarcode scan is %@ ", exception] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+      [alert show];          
+
+    }  
 }
 
 //--------------------------------------------------------------------------
@@ -319,6 +346,8 @@ parentViewController:(UIViewController*)parentViewController
 
 //--------------------------------------------------------------------------
 - (NSString*)setUpCaptureSession {
+    
+    @try {
     NSError* error = nil;
     
     AVCaptureSession* captureSession = [[[AVCaptureSession alloc] init] autorelease];
@@ -383,6 +412,13 @@ parentViewController:(UIViewController*)parentViewController
     [captureSession performSelector:@selector(startRunning) withObject:nil afterDelay:0];
     
     return nil;
+        
+         }
+     @catch (NSException *exception) {
+       UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"" message: [NSString stringWithFormat: @"Exception iin setUpCaptureSession scan is %@ ", exception] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+      [alert show];          
+
+    }  
 }
 
 //--------------------------------------------------------------------------
